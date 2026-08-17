@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" routerLink="/">FacilPago.</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+            Mantenedores Pagos
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/bloques" routerLinkActive="active">Registro de Bloques</a></li>
+            <li><a class="dropdown-item" routerLink="/departamentos" routerLinkActive="active">Registro de Departamentos</a></li>
+            <li><a class="dropdown-item" routerLink="/condominos" routerLinkActive="active">Registro de Condóminos</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" routerLink="/pagos" routerLinkActive="active">Pagos de Alícuota y Servicios</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

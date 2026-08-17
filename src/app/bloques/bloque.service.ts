@@ -1,0 +1,19 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Bloque } from './bloque';
+
+@Injectable({ providedIn: 'root' })
+export class BloqueService {
+  private apiUrl = 'http://localhost:8080/api/bloques';
+
+  constructor(private http: HttpClient) {}
+
+  getBloques(): Observable<Bloque[]> {
+    return this.http.get<Bloque[]>(this.apiUrl);
+  }
+
+  registrarBloque(bloque: Bloque): Observable<Bloque> {
+    return this.http.post<Bloque>(this.apiUrl, bloque);
+  }
+}
