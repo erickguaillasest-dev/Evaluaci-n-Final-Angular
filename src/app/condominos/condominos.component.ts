@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { CondominoService } from './condomino.service';
 import { CondominoResponse } from './condomino';
 
@@ -14,16 +15,24 @@ import { CondominoResponse } from './condomino';
 export class CondominosComponent implements OnInit {
   condominoForm!: FormGroup;
   condominos: CondominoResponse[] = [];
+  bloques: any[] = [];
+  departamentos: any[] = [];
   modoEdicion: boolean = false;
+
+  private apiUrlBloques = 'https://evaluaci-n-final-spring.onrender.com/api/bloques';
+  private apiUrlDepartamentos = 'https://evaluaci-n-final-spring.onrender.com/api/departamentos';
 
   constructor(
     private fb: FormBuilder,
-    private condominoService: CondominoService
+    private condominoService: CondominoService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
     this.iniciarFormulario();
     this.cargarCondominos();
+    this.cargarBloques();
+    this.cargarDepartamentos();
   }
 
   iniciarFormulario(): void {
@@ -33,8 +42,22 @@ export class CondominosComponent implements OnInit {
       apellidoCondomino: ['', Validators.required],
       celularCondomino: [''],
       telefonoCondomino: [''],
-      numeroBloque: ['', [Validators.required, Validators.min(1)]],
-      numeroDepartamento: ['', [Validators.required, Validators.min(1)]]
+      numeroBloque: ['', Validators.required],
+      numeroDepartamento: ['', Validators.required]
+    });
+  }
+
+  cargarBloques(): void {
+    this.http.get<any[]>(this.apiUrlBloques).subscribe({
+      next: (data) => (this.bloques = data),
+      error: (err) => console.error('Error al cargar bloques:', err)
+    });
+  }
+
+  cargarDepartamentos(): void {
+    this.http.get<any[]>(this.apiUrlDepartamentos).subscribe({
+      next: (data) => (this.departamentos = data),
+      error: (err) => console.error('Error al cargar departamentos:', err)
     });
   }
 
@@ -51,10 +74,24 @@ export class CondominosComponent implements OnInit {
       return;
     }
 
-    const payload = this.condominoForm.getRawValue();
+    const formValues = this.condominoForm.getRawValue();
+
+    const payload: any = {
+      cedulaCondomino: formValues.cedulaCondomino,
+      nombreCondomino: formValues.nombreCondomino,
+      apellidoCondomino: formValues.apellidoCondomino,
+      celularCondomino: formValues.celularCondomino,
+      telefonoCondomino: formValues.telefonoCondomino,
+      bloque: {
+        numeroBloque: formValues.numeroBloque
+      },
+      departamento: {
+        numeroDepartamento: formValues.numeroDepartamento
+      }
+    };
 
     if (this.modoEdicion) {
-      const cedula = payload.cedulaCondomino;
+      const cedula = formValues.cedulaCondomino;
       this.condominoService.actualizar(cedula, payload).subscribe({
         next: () => {
           alert('Condómino actualizado con éxito');
@@ -75,16 +112,19 @@ export class CondominosComponent implements OnInit {
     }
   }
 
-  editar(condomino: CondominoResponse): void {
+  editar(condomino: any): void {
     this.modoEdicion = true;
+    const numBloque = condomino.bloque?.numeroBloque || condomino.numeroBloque || '';
+    const numDep = condomino.departamento?.numeroDepartamento || condomino.numeroDepartamento || '';
+
     this.condominoForm.setValue({
       cedulaCondomino: condomino.cedulaCondomino,
       nombreCondomino: condomino.nombreCondomino,
       apellidoCondomino: condomino.apellidoCondomino,
       celularCondomino: condomino.celularCondomino || '',
       telefonoCondomino: condomino.telefonoCondomino || '',
-      numeroBloque: condomino.numeroBloque,
-      numeroDepartamento: condomino.numeroDepartamento
+      numeroBloque: numBloque,
+      numeroDepartamento: numDep
     });
     this.condominoForm.get('cedulaCondomino')?.disable();
   }

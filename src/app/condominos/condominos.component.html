@@ -27,16 +27,25 @@
       <input type="text" formControlName="telefonoCondomino" class="form-control" />
     </div>
 
-    <div class="col-md-3">
-      <label class="form-label">N° Bloque:</label>
-      <input type="number" formControlName="numeroBloque" class="form-control" />
-    </div>
+    <div class="col-md-6 mb-3">
+  <label class="form-label">N° Bloque:</label>
+  <select class="form-select" formControlName="numeroBloque">
+    <option value="">Seleccione un bloque...</option>
+    <option *ngFor="let b of bloques" [value]="b.numeroBloque">
+      Bloque {{ b.numeroBloque }}
+    </option>
+  </select>
+</div>
 
-    <div class="col-md-3">
-      <label class="form-label">N° Departamento:</label>
-      <input type="number" formControlName="numeroDepartamento" class="form-control" />
-    </div>
-
+   <div class="col-md-6 mb-3">
+  <label class="form-label">N° Departamento:</label>
+  <select class="form-select" formControlName="numeroDepartamento">
+    <option value="">Seleccione un departamento...</option>
+    <option *ngFor="let d of departamentos" [value]="d.numeroDepartamento">
+      Dep. {{ d.numeroDepartamento }} - {{ d.descripcionDepartamento }}
+    </option>
+  </select>
+</div>
     <div class="col-12 mt-3">
       <button type="submit" class="btn btn-primary me-2">
         {{ modoEdicion ? 'Actualizar' : 'Guardar' }}

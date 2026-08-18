@@ -16,6 +16,7 @@ export class PagosComponent implements OnInit {
   pagoForm!: FormGroup;
   pagos: Pago[] = [];
   condominos: CondominoResponse[] = [];
+  pagoIdSeleccionado: number | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -53,6 +54,30 @@ export class PagosComponent implements OnInit {
     });
   }
 
+  cargarParaEditar(pago: any): void {
+    this.pagoIdSeleccionado = pago.id;
+    const cedula = pago.condomino?.cedulaCondomino || pago.cedulaCondomino || '';
+
+    this.pagoForm.patchValue({
+      fechaPago: pago.fechaPago,
+      anioMesPago: pago.anioMesPago,
+      valorPagoAlicuota: pago.valorPagoAlicuota,
+      valorPagoConsumoServicios: pago.valorPagoConsumoServicios,
+      cedulaCondomino: cedula
+    });
+  }
+
+  limpiarFormulario(): void {
+    this.pagoIdSeleccionado = null;
+    this.pagoForm.reset({
+      fechaPago: new Date().toISOString().substring(0, 10),
+      anioMesPago: '',
+      valorPagoAlicuota: '',
+      valorPagoConsumoServicios: '',
+      cedulaCondomino: ''
+    });
+  }
+
   guardarPago(): void {
     if (this.pagoForm.invalid) {
       this.pagoForm.markAllAsTouched();
@@ -61,8 +86,7 @@ export class PagosComponent implements OnInit {
 
     const formValues = this.pagoForm.getRawValue();
 
-  
-    const nuevoPago: any = {
+    const pagoBody: any = {
       fechaPago: formValues.fechaPago,
       anioMesPago: formValues.anioMesPago,
       valorPagoAlicuota: formValues.valorPagoAlicuota,
@@ -73,17 +97,36 @@ export class PagosComponent implements OnInit {
       }
     };
 
-    this.pagoService.registrarPago(nuevoPago).subscribe({
-      next: () => {
-        alert('Pago registrado correctamente');
-        this.pagoForm.reset({
-          fechaPago: new Date().toISOString().substring(0, 10),
-          valorPagoAlicuota: '',
-          valorPagoConsumoServicios: ''
-        });
-        this.cargarPagos();
-      },
-      error: (err) => alert(err.error?.message || 'Error al registrar pago')
-    });
+    if (this.pagoIdSeleccionado) {
+      this.pagoService.actualizarPago(this.pagoIdSeleccionado, pagoBody).subscribe({
+        next: () => {
+          alert('Pago actualizado correctamente');
+          this.limpiarFormulario();
+          this.cargarPagos();
+        },
+        error: (err) => alert(err.error?.message || 'Error al actualizar pago')
+      });
+    } else {
+      this.pagoService.registrarPago(pagoBody).subscribe({
+        next: () => {
+          alert('Pago registrado correctamente');
+          this.limpiarFormulario();
+          this.cargarPagos();
+        },
+        error: (err) => alert(err.error?.message || 'Error al registrar pago')
+      });
+    }
+  }
+
+  eliminarPago(id: number): void {
+    if (confirm('¿Está seguro de eliminar este pago?')) {
+      this.pagoService.eliminarPago(id).subscribe({
+        next: () => {
+          alert('Pago eliminado correctamente');
+          this.cargarPagos();
+        },
+        error: (err) => alert(err.error?.message || 'Error al eliminar pago')
+      });
+    }
   }
 }
