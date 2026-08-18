@@ -7,7 +7,7 @@ import { CondominoRequest, CondominoResponse } from './condomino';
   providedIn: 'root'
 })
 export class CondominoService {
-  private apiUrl = 'http://localhost:8080/api/condominios';
+  private apiUrl = 'https://evaluaci-n-final-spring.onrender.com/api/condominios';
 
   constructor(private http: HttpClient) {}
 

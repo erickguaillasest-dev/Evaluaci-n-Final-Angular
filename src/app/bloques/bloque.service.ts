@@ -5,7 +5,7 @@ import { Bloque } from './bloque';
 
 @Injectable({ providedIn: 'root' })
 export class BloqueService {
-  private apiUrl = 'http://localhost:8080/api/bloques';
+  private apiUrl = 'https://evaluaci-n-final-spring.onrender.com/api/bloques';
 
   constructor(private http: HttpClient) {}
 

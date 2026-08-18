@@ -7,7 +7,7 @@ import { Pago } from './pago';
   providedIn: 'root'
 })
 export class PagoService {
-  private apiUrl = 'http://localhost:8080/api/pagos';
+  private apiUrl = 'https://evaluaci-n-final-spring.onrender.com/api/pagos';
 
   constructor(private http: HttpClient) {}
 
