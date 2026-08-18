@@ -76,15 +76,15 @@ export class CondominosComponent implements OnInit {
 
     const formValues = this.condominoForm.getRawValue();
 
-  const payload = {
-  cedulaCondomino: formValues.cedulaCondomino,
-  nombreCondomino: formValues.nombreCondomino,
-  apellidoCondomino: formValues.apellidoCondomino,
-  celularCondomino: formValues.celularCondomino,
-  telefonoCondomino: formValues.telefonoCondomino,
-  numeroBloque: formValues.numeroBloque,
-  numeroDepartamento: formValues.numeroDepartamento
-};
+    const payload = {
+      cedulaCondomino: formValues.cedulaCondomino,
+      nombreCondomino: formValues.nombreCondomino,
+      apellidoCondomino: formValues.apellidoCondomino,
+      celularCondomino: formValues.celularCondomino,
+      telefonoCondomino: formValues.telefonoCondomino,
+      numeroBloque: formValues.numeroBloque,
+      numeroDepartamento: formValues.numeroDepartamento
+    };
 
     if (this.modoEdicion) {
       const cedula = formValues.cedulaCondomino;
@@ -110,15 +110,15 @@ export class CondominosComponent implements OnInit {
 
   editar(condomino: any): void {
     this.modoEdicion = true;
-    const numBloque = condomino.bloque?.numeroBloque || condomino.numeroBloque || '';
-    const numDep = condomino.departamento?.numeroDepartamento || condomino.numeroDepartamento || '';
+    const numBloque = condomino.numeroBloque || condomino.bloque?.numeroBloque || '';
+    const numDep = condomino.numeroDepartamento || condomino.departamento?.numeroDepartamento || '';
 
     this.condominoForm.setValue({
-      cedulaCondomino: condomino.cedulaCondomino,
-      nombreCondomino: condomino.nombreCondomino,
-      apellidoCondomino: condomino.apellidoCondomino,
+      cedulaCondomino: condomino.cedulaCondomino || '',
+      nombreCondomino: condomino.nombreCondomino || '',
+      apellidoCondomino: condomino.apellidoCondominio || condomino.apellidoCondomino || '',
       celularCondomino: condomino.celularCondomino || '',
-      telefonoCondomino: condomino.telefonoCondomino || '',
+      telefonoCondomino: condomino.telefonoCondominio || condomino.telefonoCondomino || '',
       numeroBloque: numBloque,
       numeroDepartamento: numDep
     });
