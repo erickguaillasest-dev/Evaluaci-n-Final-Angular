@@ -76,19 +76,15 @@ export class CondominosComponent implements OnInit {
 
     const formValues = this.condominoForm.getRawValue();
 
-    const payload: any = {
-      cedulaCondomino: formValues.cedulaCondomino,
-      nombreCondomino: formValues.nombreCondomino,
-      apellidoCondomino: formValues.apellidoCondomino,
-      celularCondomino: formValues.celularCondomino,
-      telefonoCondomino: formValues.telefonoCondomino,
-      bloque: {
-        numeroBloque: formValues.numeroBloque
-      },
-      departamento: {
-        numeroDepartamento: formValues.numeroDepartamento
-      }
-    };
+  const payload = {
+  cedulaCondomino: formValues.cedulaCondomino,
+  nombreCondomino: formValues.nombreCondomino,
+  apellidoCondomino: formValues.apellidoCondomino,
+  celularCondomino: formValues.celularCondomino,
+  telefonoCondomino: formValues.telefonoCondomino,
+  numeroBloque: formValues.numeroBloque,
+  numeroDepartamento: formValues.numeroDepartamento
+};
 
     if (this.modoEdicion) {
       const cedula = formValues.cedulaCondomino;
